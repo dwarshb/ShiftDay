@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">ShiftDay</string>
+    <string name="ok">Ok</string>
+    <string name="error">Error: %1$s</string>
+    <string name="IS_LOGGED_OUT">logged_out</string>
+    <string name="select_user_type">What are you going to do?</string>
+    <string name="work">Work</string>
+    <string name="manage">Manage</string>
+    <string name="no_schedule_shift">You don\'t have any shifts</string>
+    <string name="shift_added_success">Shift Added Successfully</string>
+    <string name="no_open_shift_available">No Open Shifts on this Day</string>
+    <string name="shift_requested">Shift Request Sent</string>
+    <string name="no_pending_shift">No Pending Shift Requests</string>
+    <string name="deny">DENY</string>
+    <string name="approve">APPROVE</string>
+</resources>
