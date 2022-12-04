@@ -3,19 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".AutoGenerateShifts">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <LinearLayout
-            android:id="@+id/layoutToolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:background="@color/color_primary"
+            android:background="@color/color_primary_variant"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
@@ -32,39 +30,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="Create New Shifts"
+                android:text="Generate Shifts"
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <com.applandeo.materialcalendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:headerColor="@color/color_primary_variant"
+            app:type="range_picker" />
+
         <TextView
-            android:id="@+id/selectADateTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Select a date:"
+            android:layout_marginTop="16dp"
+            android:text="Employees:"
             android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textStyle="bold" />
 
-        <CalendarView
-            android:id="@+id/calenderViewSelectDate"
+        <com.google.android.material.chip.ChipGroup
+            android:padding="16dp"
+            android:id="@+id/workersGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:layout_marginStart="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp">
+
             <TextView
                 android:id="@+id/shiftBeginTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Shift Begin:"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/shiftBeginTime"
                 android:layout_width="wrap_content"
@@ -72,39 +78,62 @@
                 android:layout_marginStart="20dp"
                 android:ems="10"
                 android:hint="HH:MM:SS"
-                android:inputType="time"/>
+                android:inputType="time" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginStart="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp">
+
             <TextView
                 android:id="@+id/ShiftEndTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Shift End:"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/shiftEndTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:layout_marginStart="20dp"
+                android:ems="10"
                 android:hint="HH:MM:SS"
-                android:inputType="time"/>
+                android:inputType="time" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp">
 
+            <TextView
+                android:id="@+id/ShiftHoursTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Per Shift Hour:"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/shiftHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:ems="10"
+                android:hint="2 Hours"
+                android:inputType="number" />
+        </LinearLayout>
         <TextView
             android:id="@+id/shiftLocationTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="@string/location"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/shiftLocationEt"
@@ -113,31 +142,14 @@
             android:layout_marginStart="16dp"
             android:hint="Ex- Welcome Desk" />
 
-        <TextView
-            android:id="@+id/enterEmployeeNameTitle"
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/autoGenerateShift"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="Employee (optional):"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-
-        <Spinner
-            android:id="@+id/selectEmployeeSpinnerInNewShift"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp" />
-
-        <Button
-            android:id="@+id/createNewShiftButtonInCreateNewShift"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="60dp"
-            android:text="Create new Shift" />
-
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/generateShifts" />
     </LinearLayout>
 </ScrollView>

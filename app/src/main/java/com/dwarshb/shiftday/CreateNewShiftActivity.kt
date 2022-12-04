@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,8 +19,6 @@ import kotlin.collections.HashMap
 
 
 class CreateNewShiftActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    val dateFormat: SimpleDateFormat = SimpleDateFormat("YYYY-MM-dd")
-    val timeFormat: String = "hh:mm a"
 
     var year : Int = 0
     var month : Int = 0
@@ -48,11 +47,12 @@ class CreateNewShiftActivity: AppCompatActivity(), AdapterView.OnItemSelectedLis
         }
 
         // Widgets
-        val calView: CalendarView = findViewById<CalendarView>(R.id.calrenderViewSelectDate)
+        val calView: CalendarView = findViewById<CalendarView>(R.id.calenderViewSelectDate)
         val shift_begin: EditText = findViewById<EditText>(R.id.shiftBeginTime)
         val shift_end: EditText = findViewById<EditText>(R.id.shiftEndTime)
         val employeeSpinner: Spinner = findViewById(R.id.selectEmployeeSpinnerInNewShift)
         val btnCreateShift: Button = findViewById<Button>(R.id.createNewShiftButtonInCreateNewShift)
+        val shiftLocation : TextInputEditText = findViewById(R.id.shiftLocationEt)
 
         var cal = Calendar.getInstance()
         calView.setOnDateChangeListener { view, year, month, dayOfMonth ->
@@ -68,11 +68,11 @@ class CreateNewShiftActivity: AppCompatActivity(), AdapterView.OnItemSelectedLis
         }
 
         // Transform EditText to TimePicker
-        shift_begin.asTimePicker(context, timeFormat){ hour,minute->
+        shift_begin.asTimePicker(context, Utils.timeFormat){ hour, minute->
             startHour = hour
             startMinute = minute
         }
-        shift_end.asTimePicker(context, timeFormat){ hour,minute->
+        shift_end.asTimePicker(context, Utils.timeFormat){ hour, minute->
             endHour = hour
             endMinute = minute
         }
@@ -119,10 +119,20 @@ class CreateNewShiftActivity: AppCompatActivity(), AdapterView.OnItemSelectedLis
 
         // Creates a shift button
         btnCreateShift.setOnClickListener{
+            if (shiftLocation.text?.isEmpty() == true) {
+                shiftLocation.error = getString(R.string.fill_this_field)
+                return@setOnClickListener
+            } else if (shift_begin.text.isEmpty()) {
+                shift_begin.error = getString(R.string.fill_this_field)
+                return@setOnClickListener
+            } else if (shift_end.text.isEmpty()) {
+                shift_end.error = getString(R.string.fill_this_field)
+                return@setOnClickListener
+            }
             val shiftId = System.currentTimeMillis()
             val user = userMap[selectUser]?:null
             val isAvailable: Boolean = user == null // If none is selected make it an open shift
-            var date = dateFormat.format(Date(calView.date))
+            var date = Utils.dateFormat.format(Date(calView.date))
             cal.set(year,month,day,startHour,startMinute)
             var startTime = cal.time
             cal.set(year,month,day,endHour,endMinute)
@@ -132,14 +142,24 @@ class CreateNewShiftActivity: AppCompatActivity(), AdapterView.OnItemSelectedLis
             val shiftObject = when(user) {
                 null->{
                     ShiftData(
-                        shiftId.toString(), null,date,
-                        startTime.time.toDouble(), endTime.time.toDouble(), isAvailable
+                        shiftId.toString(),
+                        null,
+                        date,
+                        startTime.time.toDouble(),
+                        endTime.time.toDouble(),
+                        isAvailable,
+                        shiftLocation.text.toString()
                     )
                 }
                 else-> {
                     ShiftData(
-                        shiftId.toString(), user!!, date,
-                        startTime.time.toDouble(), endTime.time.toDouble(), isAvailable
+                        shiftId.toString(),
+                        user,
+                        date,
+                        startTime.time.toDouble(),
+                        endTime.time.toDouble(),
+                        isAvailable,
+                        shiftLocation.text.toString()
                     )
                 }
             }

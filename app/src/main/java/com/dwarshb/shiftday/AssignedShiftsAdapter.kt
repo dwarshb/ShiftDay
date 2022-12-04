@@ -12,8 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.database.FirebaseDatabase
-
+import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.*
 
 // Adapter to show a list of assigned shifts
 class AssignedShiftsAdapter(
@@ -26,6 +27,7 @@ class AssignedShiftsAdapter(
         val tvShiftTime = cardView.findViewById<TextView>(R.id.cardScheduleShiftTime)
         val llButtons = cardView.findViewById<LinearLayout>(R.id.cardScheduleButtonLayout)
         val mbDropBtn = cardView.findViewById<MaterialButton>(R.id.cardScheduleDrop)
+        val tvLocation = cardView.findViewById<TextView>(R.id.shiftLocation)
     }
 
     // Creates a view holder
@@ -41,20 +43,29 @@ class AssignedShiftsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val shift = assignedShiftList.get(position)
         Log.e("onBindViewHolder: ",shift.toString())
-        val date = shift.date
+
+        val strDate = shift.date
 
         val startTime = shift.startTime
         val endTime = shift.endTime
         val newTimeFormat = SimpleDateFormat("hh:mm a")
         val strStartTime: String = newTimeFormat.format(startTime)
         val strEndTime: String = newTimeFormat.format(endTime)
+        val stime = newTimeFormat.parse(strStartTime)
+        val etime = newTimeFormat.parse(strEndTime)
+
         val strShiftTime: String = "$strStartTime. - $strEndTime"
 
-        val timeDifference = endTime?.minus(startTime!!)
-        val strHours: String = timeDifference.toString() + " hours"
+        val calendar = Calendar.getInstance()
+        calendar.time = stime
+        val startHour = calendar.get(Calendar.HOUR)
+        calendar.time = etime
+        val endHour = calendar.get(Calendar.HOUR)
+        val timeDifference = endHour - startHour
+        val strHours = "$timeDifference hours"
 
-
-        holder.tvDateHours.text = date
+        holder.tvLocation.text = shift.shiftLocation
+        holder.tvDateHours.text = "$strDate ($strHours)"
         holder.tvShiftTime.text = strShiftTime
 
         val context = holder.itemView.context

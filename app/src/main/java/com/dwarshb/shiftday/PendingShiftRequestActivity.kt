@@ -56,7 +56,7 @@ class PendingShiftRequestActivity: AppCompatActivity() {
 
     private fun fetchPendingShift() {
         val pendingShifts = ArrayList<PendingShiftData>()
-        viewAdapter = PendingShiftsAdapter(pendingShifts)
+        viewAdapter = PendingShiftsAdapter(context,pendingShifts)
         recyclerView.adapter = viewAdapter
         val requestDatabase = FirebaseDatabase.getInstance().reference
             .child(Constants.Database.RequestShifts)

@@ -1,5 +1,6 @@
 package com.dwarshb.shiftday
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +9,16 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 
 // Adapter to display a list of pending shift requests
-class PendingShiftsAdapter(
+class PendingShiftsAdapter(private val context: Context,
     private val pendingShiftsList: List<PendingShiftData>)
     : RecyclerView.Adapter<PendingShiftsAdapter.ViewHolder>()
 {
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvDate: TextView = itemView.findViewById(R.id.cardPendingShiftDate)
         val tvTime: TextView = itemView.findViewById(R.id.cardPendingShiftTime)
@@ -52,7 +56,7 @@ class PendingShiftsAdapter(
         val timeDifference = endTime?.minus(startTime!!)
         val strHours: String = timeDifference.toString() + " hours"
 
-        var strAssignment: String = "Unassigned"
+        var strAssignment: String = "Unassigned \n Requested by: ${pendingShift.user?.name}"
         if(pendingShift.isDroppedBy == true && pendingShift.user != null) {
             strAssignment = "Dropped by ${pendingShift.user?.name}"
         }
@@ -88,5 +92,84 @@ class PendingShiftsAdapter(
             else
                 holder.shiftButtonLayout.visibility = View.VISIBLE
         }
+
+        holder.approveShift.setOnClickListener {
+            updateShift(holder.itemView,position,pendingShift,Constants.Shift.APPROVE)
+        }
+
+        holder.denyShift.setOnClickListener {
+            updateShift(holder.itemView,position,pendingShift,Constants.Shift.DENY)
+        }
+    }
+
+    private fun updateShift(view: View,position: Int,shift : PendingShiftData,request: String) {
+        val requestShiftDatabase = FirebaseDatabase.getInstance().reference
+            .child(Constants.Database.RequestShifts)
+        if (request == Constants.Shift.APPROVE) {
+            val shiftDatabase = FirebaseDatabase.getInstance().reference
+                .child(Constants.Database.Shifts).child(shift.date!!)
+            val map = HashMap<String, Any>()
+            val updatedShift = ShiftData(
+                id = shift.id,
+                user = shift.user,
+                date = shift.date,
+                startTime = shift.startTime,
+                endTime = shift.endTime,
+                isAvailable = false
+            )
+            map[shift.id!!] = updatedShift
+            shiftDatabase.updateChildren(map).addOnSuccessListener {
+                requestShiftDatabase
+                    .child(shift.date!!)
+                    .child(shift.id!!)
+                    .removeValue()
+                    .addOnSuccessListener {
+                        success(updatedShift, view, position)
+                    }
+                    .addOnFailureListener {
+                        Snackbar.make(
+                            view,
+                            String.format(context.getString(R.string.error), it.message),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+            }.addOnFailureListener {
+                Snackbar.make(
+                    view,
+                    String.format(context.getString(R.string.error), it.message),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        } else {
+            val map = HashMap<String, Any>()
+            val updatedShift = PendingShiftData(
+                id = shift.id,
+                user = shift.user,
+                date = shift.date,
+                startTime = shift.startTime,
+                endTime = shift.endTime,
+                isDenied = true,
+                isApproved = false,
+                isDroppedBy = false
+            )
+            map[Constants.Database.Shifts] = updatedShift
+
+            requestShiftDatabase.updateChildren(map).addOnSuccessListener {
+                success(shift,view,position)
+            }.addOnFailureListener {
+                Snackbar.make(view,
+                    String.format(context.getString(R.string.error),it.message),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun success(shiftData: Any,view: View,position: Int) {
+        //TODO(Add Undo option)
+        Snackbar.make(view,
+            context.getString(R.string.update_shift_success),
+            Snackbar.LENGTH_LONG).show()
+        notifyItemRemoved(position)
     }
 }

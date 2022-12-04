@@ -12,6 +12,7 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -51,12 +52,11 @@ class SearchOpenShiftsActivity: AppCompatActivity() {
 
     private fun fetchAvailableShift(year : Int, month: Int,day : Int) {
         var date = "$year-$month-$day"
-        if (day<10) {
-            date = "$year-$month-0$day"
-        }
+        val formattedDate = Utils.formatDateToWeek(date,"yyyy-MM-dd","MMM dd E")
+
         val shiftsDatabase = FirebaseDatabase.getInstance().reference
             .child(Constants.Database.Shifts)
-            .child(date)
+            .child(formattedDate)
         Log.e("fetchAvailableShift: ",date)
         listOfAvailableShift.clear()
         viewAdapter.notifyDataSetChanged()

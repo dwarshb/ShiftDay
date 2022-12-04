@@ -13,7 +13,8 @@ class ManagerControlsActivity: AppCompatActivity() {
     lateinit var createNewShiftButton: Button
     lateinit var addRemoveShiftsButton: Button
     lateinit var approveShiftRequestsButton: Button
-    lateinit var approveTimeOffRequestButton: Button
+    lateinit var manageWorker :Button
+    lateinit var generateAutoShifts: Button
     // On create function that assigns a layout, performs click actions for buttons.
     // Also responsible for sending and receiving tokenCode throughout the app to process various API requests.
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,8 @@ class ManagerControlsActivity: AppCompatActivity() {
         createNewShiftButton = findViewById(R.id.createNewShiftButton)
         addRemoveShiftsButton = findViewById(R.id.addRemoveShiftsButton)
         approveShiftRequestsButton = findViewById(R.id.approveShiftRequestsButton)
-        approveTimeOffRequestButton = findViewById(R.id.approveTimeOffRequestButton)
+        generateAutoShifts = findViewById(R.id.generateAutoShift)
+        manageWorker = findViewById(R.id.manageWorkers)
         // Button to go to the generate code activity
         generateCodeButton.setOnClickListener {
 //            val intentToCompanyCodeActivity = Intent(context, CompanyCodeActivity::class.java)
@@ -64,12 +66,15 @@ class ManagerControlsActivity: AppCompatActivity() {
         }
 
         // Button to go to approve/deny time off request activity
-        approveTimeOffRequestButton.setOnClickListener {
+        generateAutoShifts.setOnClickListener {
+            val intent = Intent(context,AutoGenerateShifts::class.java)
+            startActivity(intent)
 //            val intentToApproveTimeOffRequestActivity = Intent(context, ApproveTimeOffRequestActivity::class.java)
 //            intentToApproveTimeOffRequestActivity.putExtra("tokenCode", tokenCode)
 //            intentToApproveTimeOffRequestActivity.putExtra("accessCode", accessCode)
 //            startActivity(intentToApproveTimeOffRequestActivity)
         }
+
     }
 
 }

@@ -74,12 +74,20 @@
             android:text="Approve/deny shift requests" />
 
         <Button
-            android:id="@+id/approveTimeOffRequestButton"
+            android:id="@+id/generateAutoShift"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:text="Approve/Deny time off requests" />
+            android:text="Generate Automatic Shifts" />
+
+        <Button
+            android:id="@+id/manageWorkers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Manage Workers" />
 
         <TextView
             android:id="@+id/textView2"

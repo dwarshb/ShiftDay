@@ -29,6 +29,7 @@ class SearchOpenShiftsAdapter(
         val tvStatus: TextView = itemView.findViewById(R.id.cardOpenShiftStatus)
         val llControls: LinearLayout = itemView.findViewById(R.id.cardOpenShiftControls)
         val mbRequest: MaterialButton = itemView.findViewById(R.id.cardOpenShiftRequest)
+        val tvLocation : TextView = itemView.findViewById(R.id.shiftLocation)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -66,6 +67,7 @@ class SearchOpenShiftsAdapter(
             strStatus = "Dropped by ${openShift.user?.name}"
         }
 
+        holder.tvLocation.text = openShift.shiftLocation
         holder.tvDate.text = date
         holder.tvTime.text = strShiftTime
         holder.tvStatus.text = strStatus
@@ -92,7 +94,8 @@ class SearchOpenShiftsAdapter(
                     var shift = PendingShiftData(
                         id = shiftId, date = date, user = user,
                         startTime = startTime, endTime = endTime,
-                        isDenied =  false, isApproved = false, isDroppedBy = false
+                        isDenied =  false, isApproved = false, isDroppedBy = false,
+                        shiftLocation = openShift.shiftLocation
                     )
                     map[shiftId] = shift
                 }
@@ -102,7 +105,8 @@ class SearchOpenShiftsAdapter(
                         .child(date.toString())
                     var shift = ShiftData(
                         id = shiftId, date = date, user = user,
-                        startTime = startTime, endTime = endTime, isAvailable = false
+                        startTime = startTime, endTime = endTime, isAvailable = false,
+                        shiftLocation = openShift.shiftLocation
                     )
                     map[shiftId] = shift
 

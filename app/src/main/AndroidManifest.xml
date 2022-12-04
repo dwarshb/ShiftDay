@@ -17,6 +17,9 @@
         android:theme="@style/Theme.ShiftDay"
         tools:targetApi="31">
         <activity
+            android:name=".AutoGenerateShifts"
+            android:exported="false" />
+        <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -27,19 +30,19 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".SearchOpenShiftsActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".CreateNewShiftActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".ManagerControlsActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".PendingShiftRequestActivity"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

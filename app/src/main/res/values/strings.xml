@@ -13,4 +13,8 @@
     <string name="no_pending_shift">No Pending Shift Requests</string>
     <string name="deny">DENY</string>
     <string name="approve">APPROVE</string>
+    <string name="update_shift_success">Updated Shift Request Successfully</string>
+    <string name="location">Shift Location</string>
+    <string name="fill_this_field">Please fill this field</string>
+    <string name="generateShifts">Auto Generate Shifts</string>
 </resources>
